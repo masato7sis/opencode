@@ -1,0 +1,140 @@
+int sensorPin1 = A0;
+int sensorPin2 = A1;
+int sensorValue1 = 0;
+int sensorValue2 = 0;
+//int ledPin = 13;
+const int AIA = 5;
+const int AIB = 3;
+const int BIA = 9;
+const int BIB = 6;
+//int speed = 100;
+int c;
+int sr=60;
+int sl=60;
+void setup() {
+  Serial.begin(9600);
+  //pinMode(ledPin, OUTPUT);
+  pinMode(4, INPUT_PULLUP);
+  while (digitalRead(4) == HIGH) {
+  // put your setup code here, to run once:
+}
+}
+
+void forward() {
+  analogWrite(AIA, 155);
+  analogWrite(AIB, 0);
+  analogWrite(BIA, 155);
+  analogWrite(BIB, 0);
+}
+void backward() {
+  analogWrite(AIA, 0);
+  analogWrite(AIB, 255);
+  analogWrite(BIA, 0);
+  analogWrite(BIB, 255);
+}
+void left() {
+  analogWrite(AIA, 0);
+  analogWrite(AIB, 255);
+  analogWrite(BIA, 255);
+  analogWrite(BIB, 0);
+}
+void right() {
+  analogWrite(AIA, 255);
+  analogWrite(AIB, 0);
+  analogWrite(BIA, 0);
+  analogWrite(BIB, 255);
+}
+void rightC() {
+  analogWrite(AIA, 255);
+  analogWrite(AIB, 0);
+  analogWrite(BIA, 100);
+  analogWrite(BIB, 0);
+}
+void leftC() {
+  analogWrite(AIA, 100);
+  analogWrite(AIB, 0);
+  analogWrite(BIA, 255);
+  analogWrite(BIB, 0);
+}
+
+
+
+void loop() {
+  sensorValue1 = analogRead(sensorPin1);
+  sensorValue2 = analogRead(sensorPin2);
+  Serial.println(sensorValue1);
+  Serial.println(sensorValue2);
+  //int InT = digitalRead(4);
+
+  int R = sensorValue1;
+  int L = sensorValue2;
+
+
+  if ((R > sr) && (L >= sl))
+  {
+    forward();
+  } else if ((R > sr) && (L <= sl)) {
+    right();
+  } else if ((R < sr) && (L >= sl)) {
+    left();
+  } else if ((R < sr) && (L <= sl)) {
+    forward();
+  }
+
+
+
+
+
+
+  if ((c == 0) && (digitalRead(4) == LOW)) {
+    backward();
+    delay(600);
+    right();
+    delay(500);
+    leftC();
+    delay(3000);
+    c = c + 1;
+  }
+
+
+
+  if ( (c == 1) && (digitalRead(4) == LOW)) {
+    backward();
+    delay(500);
+    left();
+    delay(500);
+    rightC();
+    delay(3000);
+    c = c + 1;
+  }
+
+
+  if ( (c == 2) && (digitalRead(4) == LOW)) {
+    backward();
+    delay(600);
+    right();
+    delay(500);
+    leftC();
+    delay(3000);
+  }
+if ((c == 0) && (R > sr) && (L > sl)) {
+      forward();
+      delay(100);
+      right();
+      delay(500);
+    }
+    if ((c == 1) && (R > sr) && (L > sl)) {
+      forward();
+      delay(100);
+      left();
+      delay(500);
+    }
+    if ((c == 2) && (R > sr) && (L > sl)) {
+      forward();
+      delay(100);
+      right();
+      delay(500);
+    }
+
+
+}
